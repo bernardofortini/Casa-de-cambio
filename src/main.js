@@ -1,33 +1,58 @@
+import Swal from 'sweetalert2';
 
-import './style.css'
+import { renderCoins } from './componentes';
+import { fetchExchange } from './sevices/exchange';
 
-const elementoUl = document.querySelector('.container main ul');
-const elementoh2 = document.querySelector('.container main h2');
-
-function criarElemtoLi (nome, valor) {
-    const elementoLi =document.createElement('li');
-
-    elementoLi.innerHTML =
-    `<b>${nome}</b>
-    <span>${valor}</span>`
-
-return elementoLi;
-}
+import './style.css';
 
 
-function receberCoins (coins, basecoins) {
-    elementoUl.innerHTML = '';
+const buttonElement = document.querySelector('header form button');
 
-  coins.forEach(coin => {
-    const nome = coin.nome
-    const valor = coin.valor
+buttonElement.addEventListener('click', () => {
+  const inputElement = document.querySelector('header form input');
+  const inputValue = inputElement.value;
 
-    const elementoLi = criarElemtoLi(nome,valor)
-    
-    elementoUl.appendChild(elementoLi)
+  if(!inputValue) {
+    Swal.fire({
+      title: 'Erro!',
+      text: 'Você precisa digitar uma moeda!',
+      icon: 'error',
+      confirmButtonText: 'Ok'
+    });
 
+    return;
+  }
 
+  fetchExchange(inputValue)
+    .then(exchange => {
+      const base = exchange.base; 
 
-  });
-}
+      
+      const rates = exchange.rates;
 
+      const ratesArray = Object.entries(rates);
+
+      const ratesArrayToObject =  ratesArray.map(rateCoin => {
+        
+        const name = rateCoin[0];
+        const value = rateCoin[1];
+
+        
+
+        return {
+          name: name,
+          value: value
+        }
+      })
+
+      renderCoins(ratesArrayToObject, base);
+    })
+    .catch(error => {
+      Swal.fire({
+        title: 'Erro!',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+    })
+})

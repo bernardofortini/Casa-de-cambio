@@ -126,6 +126,50 @@ main ul li:hover span {
    color: #95EBA8 ;
 }
 
+/* Responsividade */
+@media(max-width: 900px) {
+   .container main ul {
+     grid-template-columns: repeat(3, 1fr);
+   }
+ }
+ 
+ @media(max-width: 600px) {
+   .container header {
+     flex-direction: column;
+     justify-content: unset;
+     align-items: unset;
+ 
+     padding: 16px 0;
+   }
+ 
+   .container header h1 {
+     font-size: 24px;
+   }
+ 
+   .container header form {
+     margin-top: 16px;
+     max-width: unset;
+   }
+ 
+   main h2 {
+     font-size: 18px;
+   }
+ 
+   main ul {
+     grid-template-columns: repeat(2, 1fr);
+   }
+ 
+   main ul li:hover {
+     transform: translateY(-4px) scale(110%);
+   }
+ }
+ 
+ @media(max-width: 400px) {
+   .container main ul {
+     grid-template-columns: repeat(1, 1fr);
+   }
+ }
+
 
 
 
